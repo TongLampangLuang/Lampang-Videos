@@ -263,12 +263,12 @@
       transform: translateY(-1px);
     }
 
-    /* Map 2-Column Layout */
+    /* Map 2-Column Layout - Locked widths to prevent jumping */
     #tll-archive-root .tll-map-cols {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
       gap: 2.25rem;
-      align-items: center;
+      align-items: start;
     }
     @media (max-width: 960px) {
       #tll-archive-root .tll-map-cols {
@@ -277,18 +277,24 @@
       }
     }
 
-    /* SVG Map Frame */
+    /* SVG Map Frame - Locked Dimensions */
     #tll-archive-root .tll-svg-container {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      flex-shrink: 0;
     }
     #tll-archive-root .tll-svg-container svg {
       width: 100%;
       max-width: 480px;
       height: auto;
+      display: block;
+      overflow: hidden;
+      aspect-ratio: 760 / 1260;
       filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.35));
     }
     #tll-archive-root .district-region {
@@ -400,7 +406,7 @@
       margin-top: 2px;
     }
 
-    /* District Spotlight Box */
+    /* District Spotlight Box - Locked Stability */
     #tll-archive-root .tll-spotlight-box {
       padding: clamp(1.25rem, 2.5vw, 1.85rem);
       border-radius: 22px;
@@ -409,12 +415,16 @@
       display: flex;
       flex-direction: column;
       gap: 1.1rem;
+      min-width: 0;
+      width: 100%;
+      min-height: 540px;
     }
     #tll-archive-root .tll-spotlight-head {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 0.75rem;
+      min-width: 0;
     }
     #tll-archive-root .tll-spotlight-tag {
       font-size: 11px;
@@ -451,6 +461,7 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 0.4rem;
+      min-width: 0;
     }
     #tll-archive-root .tll-chips-label {
       font-size: 11px;
@@ -471,7 +482,7 @@
       color: #ffffff;
     }
 
-    /* Top 3 Video Previews */
+    /* Top 3 Video Previews - Strict Zero-Expansion */
     #tll-archive-root .tll-spotlight-vtitle {
       font-size: 11px;
       font-weight: 600;
@@ -481,9 +492,12 @@
       display: flex;
       flex-direction: column;
       gap: 0.55rem;
+      min-width: 0;
+      width: 100%;
     }
     #tll-archive-root .tll-spotlight-vitem {
       width: 100%;
+      min-width: 0;
       padding: 0.65rem 0.75rem;
       border-radius: 12px;
       border: 1px solid var(--line-dark);
@@ -495,6 +509,7 @@
       transition: all 0.2s ease;
       text-align: left;
       color: inherit;
+      overflow: hidden;
     }
     #tll-archive-root .tll-spotlight-vitem:hover {
       border-color: var(--peach);
@@ -512,6 +527,7 @@
     #tll-archive-root .tll-spotlight-vinfo {
       min-width: 0;
       flex: 1;
+      overflow: hidden;
     }
     #tll-archive-root .tll-spotlight-vname {
       font-size: 0.82rem;
@@ -520,6 +536,8 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      display: block;
+      width: 100%;
     }
     #tll-archive-root .tll-spotlight-vmeta {
       font-size: 11px;
@@ -528,9 +546,15 @@
       display: flex;
       align-items: center;
       gap: 0.4rem;
+      min-width: 0;
+      overflow: hidden;
     }
     #tll-archive-root .tll-spotlight-vchannel {
       color: var(--peach);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 130px;
     }
     #tll-archive-root .tll-spotlight-vicon {
       font-size: 0.85rem;
