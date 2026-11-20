@@ -98,7 +98,7 @@
 
   function matchCategory(v, catKey) {
     if (catKey === 'all') return true;
-    if (catKey === 'shorts') return v.isShort === true;
+    if (catKey === 'shorts') return v.isShort === true || v.length === 'คลิปสั้น' || (v.title && v.title.toLowerCase().indexOf('short') !== -1);
     return v.category === catKey;
   }
 
@@ -136,9 +136,27 @@
       max-width: 1240px;
       margin: 0 auto;
       padding: 0.5rem 0.5rem 3rem;
+      overflow-x: hidden;
     }
-    #tll-archive-root * {
+    #tll-archive-root *,
+    #tll-archive-root *::before,
+    #tll-archive-root *::after {
       box-sizing: border-box;
+    }
+
+    /* Override ReadyPlanet global center alignment */
+    #tll-archive-root h2,
+    #tll-archive-root h3,
+    #tll-archive-root .tll-spotlight-name,
+    #tll-archive-root .tll-card-title,
+    #tll-archive-root .tll-modal-title {
+      text-align: left !important;
+    }
+
+    @media (max-width: 640px) {
+      #tll-archive-root {
+        padding: 0.25rem 0.35rem 2rem;
+      }
     }
 
     /* Top Map Band */
@@ -197,6 +215,15 @@
       border-radius: 28px;
       padding: clamp(1.25rem, 3vw, 2.25rem);
       box-shadow: 0 28px 60px rgba(0, 0, 0, 0.38);
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    @media (max-width: 640px) {
+      #tll-archive-root .tll-map-panel {
+        border-radius: 18px;
+        padding: 0.85rem 0.65rem;
+      }
     }
     #tll-archive-root .tll-map-topbar {
       display: flex;
@@ -207,14 +234,20 @@
       padding-bottom: 1.1rem;
       border-bottom: 1px solid var(--line-dark);
       margin-bottom: 1.75rem;
+      width: 100%;
+      max-width: 100%;
     }
     #tll-archive-root .tll-lens-pills {
       display: flex;
       align-items: center;
       gap: 0.45rem;
       overflow-x: auto;
-      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 6px;
       scrollbar-width: none;
+      min-width: 0;
+      max-width: 100%;
+      flex: 1 1 auto;
     }
     #tll-archive-root .tll-lens-pills::-webkit-scrollbar {
       display: none;
@@ -232,6 +265,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
+      flex-shrink: 0;
     }
     #tll-archive-root .tll-lens-pill:hover {
       border-color: var(--peach);
@@ -257,10 +291,25 @@
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
+      flex-shrink: 0;
     }
     #tll-archive-root .tll-btn-random:hover {
       background: rgba(240, 192, 166, 0.25);
       transform: translateY(-1px);
+    }
+    @media (max-width: 768px) {
+      #tll-archive-root .tll-map-topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+        padding-bottom: 0.85rem;
+        margin-bottom: 1.25rem;
+      }
+      #tll-archive-root .tll-btn-random {
+        width: 100%;
+        justify-content: center;
+        padding: 0.55rem 1rem;
+      }
     }
 
     /* Map 2-Column Layout - Locked widths to prevent jumping */
@@ -269,11 +318,12 @@
       grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
       gap: 2.25rem;
       align-items: start;
+      width: 100%;
     }
     @media (max-width: 960px) {
       #tll-archive-root .tll-map-cols {
-        grid-template-columns: 1fr;
-        gap: 1.75rem;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.5rem;
       }
     }
 
@@ -287,6 +337,7 @@
       max-width: 480px;
       margin: 0 auto;
       flex-shrink: 0;
+      overflow: hidden;
     }
     #tll-archive-root .tll-svg-container svg {
       width: 100%;
@@ -417,7 +468,16 @@
       gap: 1.1rem;
       min-width: 0;
       width: 100%;
+      max-width: 100%;
       min-height: 540px;
+      overflow: hidden;
+    }
+    @media (max-width: 960px) {
+      #tll-archive-root .tll-spotlight-box {
+        min-height: auto;
+        padding: 1.1rem 0.85rem;
+        gap: 0.95rem;
+      }
     }
     #tll-archive-root .tll-spotlight-head {
       display: flex;
@@ -425,6 +485,11 @@
       justify-content: space-between;
       gap: 0.75rem;
       min-width: 0;
+      width: 100%;
+    }
+    #tll-archive-root .tll-spotlight-head-main {
+      min-width: 0;
+      flex: 1;
     }
     #tll-archive-root .tll-spotlight-tag {
       font-size: 11px;
@@ -432,14 +497,16 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--sage-bright);
+      word-break: break-word;
     }
     #tll-archive-root .tll-spotlight-name {
       font-family: 'Kanit', sans-serif;
-      font-size: 1.85rem;
+      font-size: clamp(1.4rem, 2.8vw, 1.85rem);
       font-weight: 600;
       color: #ffffff;
       margin: 0.15rem 0 0.35rem;
       letter-spacing: -0.3px;
+      text-align: left !important;
     }
     #tll-archive-root .tll-spotlight-note {
       font-size: 0.85rem;
@@ -455,6 +522,7 @@
       font-weight: 700;
       background: var(--peach);
       color: var(--ink-deep);
+      white-space: nowrap;
     }
     #tll-archive-root .tll-spotlight-chips {
       display: flex;
@@ -462,6 +530,7 @@
       align-items: center;
       gap: 0.4rem;
       min-width: 0;
+      width: 100%;
     }
     #tll-archive-root .tll-chips-label {
       font-size: 11px;
@@ -476,6 +545,7 @@
       color: var(--mist);
       cursor: pointer;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
     #tll-archive-root .tll-chip-btn:hover {
       border-color: var(--peach);
@@ -538,14 +608,16 @@
       text-overflow: ellipsis;
       display: block;
       width: 100%;
+      max-width: 100%;
     }
     #tll-archive-root .tll-spotlight-vmeta {
       font-size: 11px;
       color: var(--text-gray);
       margin-top: 2px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       min-width: 0;
       overflow: hidden;
     }
@@ -554,7 +626,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 130px;
+      max-width: 110px;
     }
     #tll-archive-root .tll-spotlight-vicon {
       font-size: 0.85rem;
@@ -572,10 +644,28 @@
       justify-content: center;
       gap: 0.5rem;
       width: 100%;
-      padding: 0.8rem 1.5rem;
+      max-width: 100%;
+      padding: 0.8rem 1.25rem;
       border-radius: 12px;
-      font-size: 0.95rem;
+      font-size: clamp(0.82rem, 2.2vw, 0.95rem);
       font-weight: 600;
+      border: none;
+      background: linear-gradient(135deg, var(--peach) 0%, #e5aa8b 100%);
+      color: var(--ink-deep);
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      margin-top: 0.4rem;
+      text-align: center;
+      white-space: normal;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+    @media (max-width: 640px) {
+      #tll-archive-root .tll-btn-sheen {
+        padding: 0.75rem 0.85rem;
+        font-size: 0.85rem;
+      }
+    }
       border: none;
       background: linear-gradient(135deg, var(--peach) 0%, #e5aa8b 100%);
       color: var(--ink-deep);
@@ -647,6 +737,7 @@
       flex: 1;
       max-width: 380px;
       min-width: 240px;
+      width: 100%;
     }
     #tll-archive-root .tll-search-input {
       width: 100%;
@@ -686,12 +777,16 @@
       padding-bottom: 1.5rem;
       border-bottom: 1px solid var(--line-dark);
       margin-bottom: 2rem;
+      width: 100%;
+      max-width: 100%;
     }
     #tll-archive-root .tll-cat-pills {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       gap: 0.45rem;
+      min-width: 0;
+      max-width: 100%;
     }
     #tll-archive-root .tll-cat-btn {
       padding: 0.45rem 1rem;
@@ -704,6 +799,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
+      flex-shrink: 0;
     }
     #tll-archive-root .tll-cat-btn:hover {
       border-color: var(--peach);
@@ -729,6 +825,8 @@
       color: #ffffff;
       outline: none;
       cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
       appearance: none;
       background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f0c0a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
       background-repeat: no-repeat;
@@ -742,12 +840,60 @@
       background: #172321;
       color: #ffffff;
     }
+    @media (max-width: 768px) {
+      #tll-archive-root .tll-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.85rem;
+      }
+      #tll-archive-root .tll-search-wrap {
+        max-width: 100%;
+        min-width: 0;
+        width: 100%;
+      }
+      #tll-archive-root .tll-filter-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.85rem;
+        margin-bottom: 1.5rem;
+      }
+      #tll-archive-root .tll-cat-pills {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
+        padding-bottom: 6px;
+        scrollbar-width: none;
+        width: 100%;
+      }
+      #tll-archive-root .tll-cat-pills::-webkit-scrollbar {
+        display: none;
+      }
+      #tll-archive-root .tll-dropdowns {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+      }
+      #tll-archive-root .tll-select {
+        width: 100%;
+        font-size: 0.78rem;
+        padding: 0.45rem 1.4rem 0.45rem 0.65rem;
+        background-position: right 0.45rem center;
+      }
+    }
 
     /* Video Cards Grid */
     #tll-archive-root .tll-video-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
       gap: 1.5rem;
+      width: 100%;
+    }
+    @media (max-width: 600px) {
+      #tll-archive-root .tll-video-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+      }
     }
     #tll-archive-root .tll-card {
       border-radius: 18px;
@@ -1258,7 +1404,7 @@
 
     box.innerHTML = `
       <div class="tll-spotlight-head">
-        <div>
+        <div class="tll-spotlight-head-main">
           <span class="tll-spotlight-tag">
             DISTRICT SPOTLIGHT ${state.mapLens !== 'all' ? '· ' + escapeHtml(lensObj.label) : ''}
           </span>
